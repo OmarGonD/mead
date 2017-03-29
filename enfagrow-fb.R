@@ -1,6 +1,6 @@
-#setwd("D:\\Starcom\\mead\\2017\\feb")
+setwd("D:\\Starcom\\mead\\2017\\feb")
 
-setwd("C:\\d\\Mead & Johnson\\2017\\feb\\mead")
+#setwd("C:\\d\\Mead & Johnson\\2017\\feb\\mead")
 
 
 library(readxl)
@@ -37,7 +37,7 @@ colnames(mead_feb17)[12] <- "Alcance"
 mead_feb17$Alcance <- as.numeric(mead_feb17$Alcance)
 #mead_feb17$`Costo por resultados` <- as.numeric(mead_feb17$`Costo por resultados`)
 mead_feb17$`Costo` <- as.numeric(mead_feb17$`Costo`)
-mead_feb17$`Clicks` <- as.numeric(mead_feb17$`Clicks)
+mead_feb17$`Clicks` <- as.numeric(mead_feb17$Clicks)
 mead_feb17$Impresiones <- as.numeric(mead_feb17$Impresiones)
 mead_feb17$Frecuencia <- as.numeric(mead_feb17$Frecuencia)
 
@@ -48,7 +48,15 @@ mead_feb17 <- mead_feb17 %>%
             mutate(Frecuencia = Frecuencia/100)
 
 
+
 mead_feb17$Anuncio <- gsub("(^PP[A-Z].*- |Carrusel.*- )", "", mead_feb17$Anuncio)
+
+
+
+
+
+mead_feb17$Anuncio <- gsub("Promo mi vasito y mi platito", "Promo mi vasito \ny mi platito", mead_feb17$Anuncio)
+
 
 
 
@@ -106,7 +114,7 @@ mead_feb17_carrusel <- mead_feb17_long %>%
 
 
 
-### PPAs
+### PPLs
 
 #Impresiones
 
@@ -291,14 +299,14 @@ ggplot(mead_feb17_ppl_ctr, aes(x=factor(`Anuncio`), y=measurement, label=percent
         legend.text = element_text(colour="grey10", size=12, face="bold"),
         strip.text.x = element_text(size = 22,
                                     hjust = 0.5, vjust = 0.5)) +
-  scale_y_continuous(labels = percent, limits = c(0, 0.08)) +
+  scale_y_continuous(labels = percent, limits = c(0, 0.05)) +
   geom_text(hjust=0.5, vjust=-1.2, size = 8)
 
 
 
 
 
-ggsave("ppas-ctrs.jpg", width = 14)
+ggsave("ppls-ctrs.jpg", width = 14)
 
 
 
@@ -332,7 +340,7 @@ ggplot(mead_feb17_ppl_alcance, aes(x=factor(`Anuncio`), y=measurement, label=com
   facet_grid( ~ condition) +
   geom_col(fill = "#FF9933") +
   theme_light() +
-  labs(title="Enfabebé - PPAs - Alcance", x = "") +
+  labs(title="Enfabebé - PPLs - Alcance", x = "") +
   theme(axis.text.x = element_text(colour="grey20",size=18,hjust=.5,vjust=.5,face="plain"),
         axis.text.y = element_text(colour="grey20",size=18,hjust=1,vjust=0,face="plain"),  
         axis.title.x = element_text(colour="grey20",size=12,angle=0,hjust=.5,vjust=0,face="plain"),
@@ -393,7 +401,7 @@ ggplot(mead_feb17_ppl_freq, aes(x=factor(`Anuncio`), y=measurement, label=percen
         legend.text = element_text(colour="grey10", size=12, face="bold"),
         strip.text.x = element_text(size = 22,
                                     hjust = 0.5, vjust = 0.5)) +
-  scale_y_continuous(labels = percent, limits = c(0, 0.0005)) +
+  scale_y_continuous(labels = percent, limits = c(0, 0.05)) +
   geom_text(hjust=0.5, vjust=-1.2, size = 8)
 
 
@@ -464,7 +472,7 @@ ggsave("ppls-frecuencia.jpg", width = 14)
 ########################################
 
 ########################################
-############# PPAs #####################
+############# PPAs 28 ##################
 ########################################
 
 
@@ -475,7 +483,7 @@ ggsave("ppls-frecuencia.jpg", width = 14)
 
 #Impresiones
 
-
+unique(mead_feb17_ppa$Anuncio)
 
 
 mead_feb17_ppa_imp <- mead_feb17_ppa %>%
@@ -499,7 +507,7 @@ mead_feb17_ppa_imp$condition <- factor(mead_feb17_ppa_imp$condition,
 
 mead_feb17_ppa_imp$Anuncio <- factor(mead_feb17_ppa_imp$Anuncio,
                                        levels = rev(c("Mamá","Gatea",
-                                                      "Promo mi vasito y mi platito")),
+                                                      "Promo mi vasito \ny mi platito")),
                                        ordered = TRUE)
 
 
@@ -519,7 +527,8 @@ ggplot(mead_feb17_ppa_imp, aes(x=factor(`Anuncio`), y=measurement, label=comma(r
         strip.text.x = element_text(size = 18,
                                     hjust = 0.5, vjust = 0.5)) +
   scale_y_continuous(labels = comma, limits = c(0, 4000000)) +
-  geom_text(hjust=+0.5, vjust=-0.5, size = 8) 
+  geom_text(hjust=+0.5, vjust=-0.5, size = 8) +
+  coord_flip()
 
 
 
@@ -556,7 +565,7 @@ mead_feb17_ppa_clicks$condition <- factor(mead_feb17_ppa_clicks$condition,
 
 mead_feb17_ppa_clicks$Anuncio <- factor(mead_feb17_ppa_clicks$Anuncio,
                                      levels = rev(c("Gatea",
-                                                    "Promo mi vasito y mi platito",
+                                                    "Promo mi vasito \ny mi platito",
                                                     "Mamá")),
                                      ordered = TRUE)
 
